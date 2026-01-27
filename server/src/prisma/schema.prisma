@@ -9,22 +9,31 @@ datasource db {
 
 model Player {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  rank       String
-  class      String?
-  weaknesses String[]
+  rank       String               // E, D, C, B, A, S, SS
+  class      String?              // Backend, Frontend, etc.
+  weaknesses String[]             // Aggregated weak areas
   createdAt  DateTime @default(now())
+
+  @@index([rank])
 }
 
 model DungeonAttempt {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  playerId    String   @db.ObjectId
-  rank        String
-  questions   String[]
-  answers     String[]
-  avgScore    Float
-  passed      Boolean
-  isBoss      Boolean @default(false)   
-  createdAt   DateTime @default(now())
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  playerId  String   @db.ObjectId
+
+  rank      String               // Rank at time of attempt
+  role      String               // Backend Engineer, etc.
+  isBoss    Boolean @default(false)
+
+  avgScore  Float
+  passed    Boolean
+
+  // ====== ANALYTICS / DASHBOARD ======
+  weakAreas    String[]           // ["Indexing", "System Design"]
+  questionMeta Json               // compressed per-question data
+
+  createdAt DateTime @default(now())
 
   @@index([playerId])
+  @@index([rank])
 }
