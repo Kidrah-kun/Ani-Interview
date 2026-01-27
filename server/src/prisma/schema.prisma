@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Player {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  rank       String
+  class      String?
+  weaknesses String[]
+  createdAt  DateTime @default(now())
+}
+
+model DungeonAttempt {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  playerId    String   @db.ObjectId
+  rank        String
+  questions   String[]
+  answers     String[]
+  avgScore    Float
+  passed      Boolean
+  isBoss      Boolean @default(false)   
+  createdAt   DateTime @default(now())
+
+  @@index([playerId])
+}
