@@ -1,0 +1,778 @@
+/* ============================================
+   ANI-INTERVIEW - SIGNUP PAGE STYLES
+   Multi-step Registration Flow
+   ============================================ */
+
+/* CSS Custom Properties */
+:root {
+    /* Colors */
+    --color-blood: #8b0000;
+    --color-blood-dark: #5c0000;
+    --color-blood-glow: #ff2a2a;
+    --color-gold: #c9a227;
+    --color-gold-dim: #8b7355;
+    --color-bone: #e8dcc4;
+    --color-parchment: #d4c5a9;
+    --color-shadow: #0a0a0a;
+    --color-night: #1a1a1a;
+    --color-ember: #ff6b35;
+
+    /* Typography */
+    --font-display: 'Cinzel', serif;
+    --font-body: 'Crimson Text', serif;
+
+    /* Transitions */
+    --transition-fast: 0.2s ease;
+    --transition-medium: 0.4s ease;
+    --transition-slow: 0.8s ease;
+}
+
+/* Reset & Base */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    font-family: var(--font-body);
+    background: var(--color-shadow);
+    color: var(--color-bone);
+}
+
+/* ============================================
+   SCENE SYSTEM
+   ============================================ */
+.scene {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+    z-index: 1;
+}
+
+.scene.active {
+    opacity: 1;
+    visibility: visible;
+    z-index: 10;
+}
+
+.scene-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+}
+
+.dungeon-bg {
+    background-image: url('/assets/dungeon_entry.png');
+}
+
+.guild-bg {
+    background-image: url('/assets/landing_bg.png');
+}
+
+.vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center,
+            transparent 0%,
+            transparent 30%,
+            rgba(0, 0, 0, 0.4) 70%,
+            rgba(0, 0, 0, 0.85) 100%);
+    pointer-events: none;
+    z-index: 2;
+}
+
+.scene-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+}
+
+/* ============================================
+   SCENE 1: DUNGEON ENTRY
+   ============================================ */
+.scene-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--color-bone);
+    text-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+    margin-bottom: 0.5rem;
+}
+
+.scene-subtitle {
+    font-size: 1.2rem;
+    color: var(--color-parchment);
+    opacity: 0.8;
+    margin-bottom: 3rem;
+}
+
+.btn-continue {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2.5rem;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    letter-spacing: 0.15em;
+    color: var(--color-bone);
+    background: linear-gradient(180deg, rgba(139, 0, 0, 0.8) 0%, rgba(92, 0, 0, 0.9) 100%);
+    border: 1px solid var(--color-blood);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all var(--transition-medium);
+}
+
+.btn-continue:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(139, 0, 0, 0.5);
+}
+
+.arrow-icon {
+    width: 20px;
+    height: 20px;
+}
+
+/* Fade in animations */
+.fade-in {
+    animation: fadeInUp 0.8s ease forwards;
+}
+
+.delay-1 {
+    animation-delay: 0.3s;
+    opacity: 0;
+}
+
+.delay-2 {
+    animation-delay: 0.6s;
+    opacity: 0;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================
+   SCENE 2: GUILD MASTER
+   ============================================ */
+.guildmaster-container {
+    position: absolute;
+    bottom: 15%;
+    left: 10%;
+    z-index: 5;
+    animation: guildmasterEnter 1s ease forwards;
+}
+
+.guildmaster-image {
+    width: clamp(200px, 30vw, 400px);
+    height: auto;
+    filter: drop-shadow(0 0 30px rgba(0, 0, 0, 0.8));
+}
+
+@keyframes guildmasterEnter {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.dialog-container {
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 700px;
+    z-index: 20;
+}
+
+.dialog-box {
+    background: linear-gradient(180deg,
+            rgba(20, 20, 25, 0.95) 0%,
+            rgba(10, 10, 15, 0.98) 100%);
+    border: 2px solid var(--color-blood-dark);
+    border-radius: 8px;
+    padding: 1.5rem 2rem;
+    position: relative;
+    box-shadow:
+        0 0 30px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(139, 0, 0, 0.3);
+}
+
+.dialog-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.dialog-name {
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+    color: var(--color-gold);
+    text-transform: uppercase;
+}
+
+.dialog-indicator {
+    width: 8px;
+    height: 8px;
+    background: var(--color-blood);
+    border-radius: 50%;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 0.5;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+}
+
+.dialog-content {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--color-bone);
+    min-height: 3rem;
+}
+
+.dialog-next-btn {
+    position: absolute;
+    bottom: 1rem;
+    right: 1.5rem;
+    background: none;
+    border: none;
+    color: var(--color-gold);
+    font-size: 1rem;
+    cursor: pointer;
+    animation: bounce 1s ease-in-out infinite;
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(5px);
+    }
+}
+
+/* ============================================
+   SCENE 3: REGISTRATION FORM
+   ============================================ */
+.register-panel {
+    position: relative;
+    z-index: 10;
+    width: 90%;
+    max-width: 500px;
+    background: linear-gradient(180deg,
+            rgba(30, 25, 25, 0.95) 0%,
+            rgba(20, 15, 15, 0.98) 100%);
+    border: 2px solid rgba(139, 0, 0, 0.6);
+    border-radius: 8px;
+    padding: 2.5rem 2rem;
+    box-shadow:
+        0 0 60px rgba(0, 0, 0, 0.6),
+        inset 0 0 100px rgba(139, 0, 0, 0.05);
+}
+
+/* Decorative corners */
+.panel-border {
+    position: absolute;
+    inset: -5px;
+    pointer-events: none;
+}
+
+.panel-corner {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--color-blood);
+}
+
+.panel-corner.top-left {
+    top: 0;
+    left: 0;
+    border-right: none;
+    border-bottom: none;
+}
+
+.panel-corner.top-right {
+    top: 0;
+    right: 0;
+    border-left: none;
+    border-bottom: none;
+}
+
+.panel-corner.bottom-left {
+    bottom: 0;
+    left: 0;
+    border-right: none;
+    border-top: none;
+}
+
+.panel-corner.bottom-right {
+    bottom: 0;
+    right: 0;
+    border-left: none;
+    border-top: none;
+}
+
+.register-title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--color-bone);
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.register-subtitle {
+    font-size: 1rem;
+    color: var(--color-parchment);
+    text-align: center;
+    opacity: 0.7;
+    margin-bottom: 2rem;
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.form-group {
+    width: 100%;
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+}
+
+.flex-grow {
+    flex: 1;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.9rem 1.2rem;
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    color: var(--color-bone);
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(139, 0, 0, 0.5);
+    border-radius: 4px;
+    outline: none;
+    transition: all var(--transition-fast);
+}
+
+.form-input::placeholder {
+    color: var(--color-parchment);
+    opacity: 0.6;
+}
+
+.form-input:focus {
+    border-color: var(--color-blood);
+    box-shadow: 0 0 15px rgba(139, 0, 0, 0.3);
+}
+
+.form-select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238b0000' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
+}
+
+.form-select option {
+    background: var(--color-night);
+    color: var(--color-bone);
+}
+
+.upload-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.9rem 1rem;
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    color: var(--color-parchment);
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(139, 0, 0, 0.5);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+}
+
+.upload-btn:hover {
+    border-color: var(--color-blood);
+    color: var(--color-bone);
+}
+
+.upload-btn.uploaded {
+    border-color: var(--color-gold);
+    color: var(--color-gold);
+}
+
+.upload-icon {
+    width: 18px;
+    height: 18px;
+}
+
+.btn-register {
+    position: relative;
+    margin-top: 1rem;
+    padding: 1rem 3rem;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: var(--color-bone);
+    background: linear-gradient(180deg,
+            rgba(139, 0, 0, 0.9) 0%,
+            rgba(92, 0, 0, 0.95) 100%);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    overflow: visible;
+    transition: all var(--transition-medium);
+}
+
+.btn-register:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 30px rgba(139, 0, 0, 0.5);
+}
+
+.btn-wings {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: calc(100% + 40px);
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+}
+
+.wing {
+    width: 20px;
+    height: 16px;
+    color: var(--color-blood);
+    transition: all var(--transition-medium);
+}
+
+.btn-register:hover .wing.left {
+    transform: translateX(-5px);
+}
+
+.btn-register:hover .wing.right {
+    transform: translateX(5px);
+}
+
+.back-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    color: var(--color-parchment);
+    text-decoration: none;
+    opacity: 0.7;
+    transition: all var(--transition-fast);
+}
+
+.back-link:hover {
+    opacity: 1;
+    color: var(--color-bone);
+}
+
+.back-link svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* ============================================
+   SCENE 4: RANK ASSIGNMENT
+   ============================================ */
+.rank-reveal-container {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.rank-card {
+    position: relative;
+    width: 90%;
+    max-width: 450px;
+    background: linear-gradient(180deg,
+            rgba(25, 20, 25, 0.95) 0%,
+            rgba(15, 10, 15, 0.98) 100%);
+    border: 2px solid var(--color-blood);
+    border-radius: 12px;
+    padding: 3rem 2.5rem;
+    text-align: center;
+    animation: cardReveal 1s ease forwards;
+}
+
+@keyframes cardReveal {
+    from {
+        opacity: 0;
+        transform: scale(0.8) translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.rank-glow {
+    position: absolute;
+    inset: -20px;
+    background: radial-gradient(ellipse at center,
+            rgba(139, 0, 0, 0.3) 0%,
+            transparent 70%);
+    animation: glowPulse 2s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes glowPulse {
+
+    0%,
+    100% {
+        opacity: 0.5;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+}
+
+.rank-title {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--color-gold);
+    margin-bottom: 2rem;
+}
+
+.player-id-section {
+    margin-bottom: 2rem;
+}
+
+.label {
+    display: block;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    color: var(--color-parchment);
+    opacity: 0.7;
+    margin-bottom: 0.5rem;
+}
+
+.player-id {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: var(--color-bone);
+}
+
+.rank-badge-section {
+    margin-bottom: 2rem;
+}
+
+.rank-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 100px;
+    margin: 1rem 0;
+    background: linear-gradient(180deg,
+            rgba(139, 0, 0, 0.8) 0%,
+            rgba(92, 0, 0, 0.9) 100%);
+    border: 3px solid var(--color-blood);
+    border-radius: 50%;
+    box-shadow:
+        0 0 40px rgba(139, 0, 0, 0.6),
+        inset 0 0 30px rgba(0, 0, 0, 0.3);
+    animation: badgeReveal 0.8s ease 0.5s forwards, badgeGlow 2s ease-in-out 1.3s infinite;
+    opacity: 0;
+}
+
+@keyframes badgeReveal {
+    from {
+        opacity: 0;
+        transform: scale(0) rotate(-180deg);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) rotate(0);
+    }
+}
+
+@keyframes badgeGlow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 40px rgba(139, 0, 0, 0.6), inset 0 0 30px rgba(0, 0, 0, 0.3);
+    }
+
+    50% {
+        box-shadow: 0 0 60px rgba(139, 0, 0, 0.8), inset 0 0 30px rgba(0, 0, 0, 0.3);
+    }
+}
+
+.rank-letter {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--color-bone);
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.rank-name {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    color: var(--color-parchment);
+}
+
+.rank-message {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--color-parchment);
+    opacity: 0.8;
+    margin-bottom: 2rem;
+}
+
+.btn-enter-hall {
+    padding: 1rem 2.5rem;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    color: var(--color-bone);
+    background: linear-gradient(180deg,
+            rgba(139, 0, 0, 0.9) 0%,
+            rgba(92, 0, 0, 0.95) 100%);
+    border: 1px solid var(--color-blood);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all var(--transition-medium);
+}
+
+.btn-enter-hall:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(139, 0, 0, 0.5);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+    .guildmaster-container {
+        left: 5%;
+        bottom: 20%;
+    }
+
+    .guildmaster-image {
+        width: 180px;
+    }
+
+    .dialog-container {
+        bottom: 5%;
+    }
+
+    .form-row {
+        flex-direction: column;
+    }
+
+    .register-panel {
+        padding: 2rem 1.5rem;
+    }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+
+    .scene,
+    .fade-in,
+    .guildmaster-container,
+    .rank-card,
+    .rank-badge {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+
+    .dialog-indicator,
+    .dialog-next-btn,
+    .rank-glow {
+        animation: none;
+    }
+}
+
+.btn-continue:focus,
+.btn-register:focus,
+.btn-enter-hall:focus,
+.form-input:focus {
+    outline: 2px solid var(--color-blood);
+    outline-offset: 3px;
+}

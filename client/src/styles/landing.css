@@ -1,0 +1,418 @@
+/* ============================================
+   ANI-INTERVIEW - LANDING PAGE STYLES
+   Dark Fantasy RPG Theme
+   ============================================ */
+
+/* CSS Custom Properties */
+:root {
+    /* Colors */
+    --color-blood: #8b0000;
+    --color-blood-dark: #5c0000;
+    --color-blood-glow: #ff2a2a;
+    --color-gold: #c9a227;
+    --color-gold-dim: #8b7355;
+    --color-bone: #e8dcc4;
+    --color-parchment: #d4c5a9;
+    --color-shadow: #0a0a0a;
+    --color-night: #1a1a1a;
+    --color-ember: #ff6b35;
+
+    /* Typography */
+    --font-display: 'Cinzel', serif;
+    --font-body: 'Crimson Text', serif;
+
+    /* Spacing */
+    --space-xs: 0.5rem;
+    --space-sm: 1rem;
+    --space-md: 1.5rem;
+    --space-lg: 2rem;
+    --space-xl: 3rem;
+
+    /* Transitions */
+    --transition-fast: 0.2s ease;
+    --transition-medium: 0.4s ease;
+    --transition-slow: 0.8s ease;
+}
+
+/* Reset & Base */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-body);
+    background: var(--color-shadow);
+    color: var(--color-bone);
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+/* ============================================
+   LANDING CONTAINER
+   ============================================ */
+.landing-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.8s ease;
+}
+
+/* ============================================
+   GATE INTRO VIDEO OVERLAY
+   ============================================ */
+.gate-intro {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: opacity 1s ease;
+}
+
+.gate-intro.fade-out {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.gate-intro.hidden {
+    display: none;
+}
+
+.gate-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Background Layer */
+.bg-layer {
+    position: absolute;
+    inset: 0;
+    background-image: url('/assets/landing_bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 1;
+}
+
+/* Vignette Overlay */
+.vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center,
+            transparent 0%,
+            transparent 40%,
+            rgba(0, 0, 0, 0.3) 70%,
+            rgba(0, 0, 0, 0.7) 100%);
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* ============================================
+   MAIN CONTENT
+   ============================================ */
+.content {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--space-lg);
+}
+
+/* ============================================
+   LOGO EMBLEM
+   ============================================ */
+.logo-emblem {
+    width: 120px;
+    height: 120px;
+    margin-bottom: var(--space-sm);
+    animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.dragon-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 0 15px rgba(139, 0, 0, 0.8)) drop-shadow(0 0 30px rgba(139, 0, 0, 0.4));
+}
+
+@keyframes pulse-glow {
+
+    0%,
+    100% {
+        filter: drop-shadow(0 0 10px rgba(139, 0, 0, 0.6));
+        transform: scale(1);
+    }
+
+    50% {
+        filter: drop-shadow(0 0 20px rgba(139, 0, 0, 0.9));
+        transform: scale(1.02);
+    }
+}
+
+/* ============================================
+   TITLE
+   ============================================ */
+.title {
+    margin-bottom: var(--space-xl);
+}
+
+.title-main {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: var(--color-bone);
+    text-shadow:
+        0 0 10px rgba(0, 0, 0, 0.8),
+        0 0 30px rgba(0, 0, 0, 0.6),
+        2px 2px 4px rgba(0, 0, 0, 0.9);
+    display: block;
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    min-width: 220px;
+}
+
+.btn {
+    position: relative;
+    display: block;
+    padding: var(--space-sm) var(--space-lg);
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-decoration: none;
+    text-align: center;
+    color: var(--color-bone);
+    background: linear-gradient(180deg,
+            rgba(30, 30, 30, 0.9) 0%,
+            rgba(15, 15, 15, 0.95) 100%);
+    border: 1px solid rgba(139, 0, 0, 0.5);
+    border-radius: 2px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all var(--transition-medium);
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(139, 0, 0, 0.1) 50%,
+            transparent 100%);
+    transform: translateX(-100%);
+    transition: transform var(--transition-medium);
+}
+
+.btn:hover {
+    border-color: var(--color-blood);
+    color: var(--color-parchment);
+    box-shadow:
+        0 0 15px rgba(139, 0, 0, 0.3),
+        inset 0 0 20px rgba(139, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.btn:hover::before {
+    transform: translateX(100%);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn-text {
+    position: relative;
+    z-index: 2;
+}
+
+/* Primary Button Variation */
+.btn-primary {
+    border-color: rgba(139, 0, 0, 0.7);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(180deg,
+            rgba(60, 20, 20, 0.95) 0%,
+            rgba(30, 10, 10, 0.98) 100%);
+}
+
+/* Secondary Button Variation */
+.btn-secondary {
+    border-color: rgba(100, 100, 100, 0.4);
+}
+
+.btn-secondary:hover {
+    border-color: rgba(139, 0, 0, 0.6);
+}
+
+/* ============================================
+   TORCH AMBIENT EFFECTS
+   ============================================ */
+.torch {
+    position: absolute;
+    width: 100px;
+    height: 200px;
+    pointer-events: none;
+    z-index: 3;
+}
+
+.torch-left {
+    left: 15%;
+    top: 40%;
+    background: radial-gradient(ellipse at center,
+            rgba(255, 107, 53, 0.15) 0%,
+            rgba(255, 107, 53, 0.05) 40%,
+            transparent 70%);
+    animation: flicker-left 4s ease-in-out infinite;
+}
+
+.torch-right {
+    right: 15%;
+    top: 40%;
+    background: radial-gradient(ellipse at center,
+            rgba(255, 107, 53, 0.15) 0%,
+            rgba(255, 107, 53, 0.05) 40%,
+            transparent 70%);
+    animation: flicker-right 4.5s ease-in-out infinite;
+}
+
+@keyframes flicker-left {
+
+    0%,
+    100% {
+        opacity: 0.8;
+        transform: scale(1);
+    }
+
+    25% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+
+    50% {
+        opacity: 0.7;
+        transform: scale(0.98);
+    }
+
+    75% {
+        opacity: 0.9;
+        transform: scale(1.02);
+    }
+}
+
+@keyframes flicker-right {
+
+    0%,
+    100% {
+        opacity: 0.9;
+        transform: scale(1.02);
+    }
+
+    25% {
+        opacity: 0.7;
+        transform: scale(0.98);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+
+    75% {
+        opacity: 0.8;
+        transform: scale(1);
+    }
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 768px) {
+    .logo-emblem {
+        width: 60px;
+        height: 60px;
+    }
+
+    .button-group {
+        min-width: 180px;
+    }
+
+    .btn {
+        padding: var(--space-sm) var(--space-md);
+        font-size: 0.85rem;
+    }
+
+    .torch-left,
+    .torch-right {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .title-main {
+        letter-spacing: 0.1em;
+    }
+
+    .button-group {
+        min-width: 160px;
+    }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+
+    .logo-emblem,
+    .torch-left,
+    .torch-right {
+        animation: none;
+    }
+
+    .btn::before {
+        display: none;
+    }
+}
+
+/* Focus states for keyboard navigation */
+.btn:focus {
+    outline: 2px solid var(--color-blood);
+    outline-offset: 3px;
+}
+
+.btn:focus:not(:focus-visible) {
+    outline: none;
+}
+
+.btn:focus-visible {
+    outline: 2px solid var(--color-blood);
+    outline-offset: 3px;
+}

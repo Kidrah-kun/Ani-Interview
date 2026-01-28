@@ -1,0 +1,500 @@
+/* ============================================
+   ANI-INTERVIEW - DASHBOARD STYLES
+   Guild Hall Interface
+   ============================================ */
+
+/* CSS Custom Properties */
+:root {
+    --color-blood: #8b0000;
+    --color-blood-dark: #5c0000;
+    --color-gold: #c9a227;
+    --color-bone: #e8dcc4;
+    --color-parchment: #d4c5a9;
+    --color-shadow: #0a0a0a;
+    --color-night: #1a1a1a;
+    --color-purple: #7c3aed;
+
+    --font-display: 'Cinzel', serif;
+    --font-body: 'Crimson Text', serif;
+
+    --transition-fast: 0.2s ease;
+    --transition-medium: 0.4s ease;
+}
+
+/* Reset & Base */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    font-family: var(--font-body);
+    background: var(--color-shadow);
+    color: var(--color-bone);
+}
+
+/* ============================================
+   DASHBOARD CONTAINER
+   ============================================ */
+.dashboard-container {
+    min-height: 100vh;
+    position: relative;
+}
+
+.dashboard-bg {
+    position: fixed;
+    inset: 0;
+    background-image: url('/assets/guild_hall_dashboard.png');
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+}
+
+.vignette {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse at center,
+            transparent 0%,
+            transparent 20%,
+            rgba(0, 0, 0, 0.3) 60%,
+            rgba(0, 0, 0, 0.7) 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* ============================================
+   GLASS PANEL EFFECT
+   ============================================ */
+.glass-panel {
+    background: linear-gradient(180deg,
+            rgba(15, 15, 20, 0.85) 0%,
+            rgba(10, 10, 15, 0.9) 100%);
+    border: 1px solid rgba(139, 0, 0, 0.4);
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   NAVIGATION
+   ============================================ */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    background: linear-gradient(180deg,
+            rgba(10, 10, 15, 0.95) 0%,
+            rgba(5, 5, 10, 0.9) 100%);
+    border-bottom: 1px solid rgba(139, 0, 0, 0.3);
+    z-index: 100;
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+}
+
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+}
+
+.logo-img {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+}
+
+.logo-text {
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--color-bone);
+}
+
+.nav-center {
+    display: flex;
+    gap: 2.5rem;
+}
+
+.nav-link {
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--color-parchment);
+    text-decoration: none;
+    opacity: 0.7;
+    transition: all var(--transition-fast);
+    position: relative;
+}
+
+.nav-link:hover {
+    opacity: 1;
+    color: var(--color-bone);
+}
+
+.nav-link.active {
+    opacity: 1;
+    color: var(--color-bone);
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--color-blood);
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+}
+
+.rank-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    color: var(--color-bone);
+    background: linear-gradient(180deg,
+            rgba(124, 58, 237, 0.8) 0%,
+            rgba(88, 28, 200, 0.9) 100%);
+    border: 1px solid rgba(124, 58, 237, 0.6);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.rank-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+}
+
+.rank-badge-small {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    font-weight: 700;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+}
+
+/* ============================================
+   MAIN CONTENT
+   ============================================ */
+.main-content {
+    position: relative;
+    z-index: 10;
+    display: grid;
+    grid-template-columns: 280px 1fr 200px;
+    gap: 2rem;
+    min-height: 100vh;
+    padding: 80px 2rem 2rem;
+}
+
+/* ============================================
+   PLAYER PANEL (LEFT)
+   ============================================ */
+.player-panel {
+    padding: 1.5rem;
+    height: fit-content;
+}
+
+.panel-title {
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--color-parchment);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(139, 0, 0, 0.3);
+}
+
+.player-rank-display {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.rank-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-bone);
+    background: linear-gradient(180deg,
+            rgba(139, 0, 0, 0.8) 0%,
+            rgba(92, 0, 0, 0.9) 100%);
+    border: 2px solid var(--color-blood);
+    border-radius: 8px;
+}
+
+.player-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.info-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    color: var(--color-parchment);
+    opacity: 0.6;
+    text-transform: uppercase;
+}
+
+.info-value {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    color: var(--color-bone);
+}
+
+.player-id-display,
+.player-name-display {
+    margin-bottom: 1rem;
+}
+
+.player-id-value {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    color: var(--color-bone);
+}
+
+.check-icon {
+    width: 16px;
+    height: 16px;
+    color: var(--color-gold);
+}
+
+/* ============================================
+   CENTER CONTENT
+   ============================================ */
+.center-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding-top: 2rem;
+}
+
+.stats-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.stat-item {
+    padding: 1rem 1.25rem;
+    text-align: center;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    color: var(--color-parchment);
+    opacity: 0.7;
+    margin-bottom: 0.5rem;
+}
+
+.stat-value {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: var(--color-bone);
+}
+
+.stat-icon {
+    width: 20px;
+    height: 20px;
+    opacity: 0.7;
+}
+
+.recommendation-panel {
+    padding: 2.5rem;
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.recommendation-title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--color-bone);
+    margin-bottom: 1rem;
+}
+
+.recommendation-text {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--color-parchment);
+    opacity: 0.8;
+    margin-bottom: 2rem;
+}
+
+.btn-dungeon {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: var(--color-bone);
+    background: linear-gradient(180deg,
+            rgba(124, 58, 237, 0.9) 0%,
+            rgba(88, 28, 200, 0.95) 100%);
+    border: 1px solid rgba(124, 58, 237, 0.6);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all var(--transition-medium);
+}
+
+.btn-dungeon:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(124, 58, 237, 0.4);
+}
+
+/* ============================================
+   EMBLEM PANEL (RIGHT)
+   ============================================ */
+.emblem-panel {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 3rem;
+}
+
+.guild-emblem {
+    width: 150px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(180deg,
+            rgba(15, 15, 20, 0.7) 0%,
+            rgba(10, 10, 15, 0.8) 100%);
+    border: 2px solid rgba(139, 0, 0, 0.4);
+    border-radius: 12px;
+    padding: 1rem;
+}
+
+.emblem-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 0 20px rgba(139, 0, 0, 0.5));
+    animation: emblemPulse 3s ease-in-out infinite;
+}
+
+@keyframes emblemPulse {
+
+    0%,
+    100% {
+        filter: drop-shadow(0 0 20px rgba(139, 0, 0, 0.5));
+        transform: scale(1);
+    }
+
+    50% {
+        filter: drop-shadow(0 0 30px rgba(139, 0, 0, 0.7));
+        transform: scale(1.02);
+    }
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 1024px) {
+    .main-content {
+        grid-template-columns: 1fr;
+    }
+
+    .emblem-panel {
+        display: none;
+    }
+
+    .stats-bar {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0 1rem;
+    }
+
+    .nav-center {
+        display: none;
+    }
+
+    .logo-text {
+        display: none;
+    }
+
+    .main-content {
+        padding: 80px 1rem 1rem;
+    }
+
+    .stats-bar {
+        grid-template-columns: 1fr;
+    }
+
+    .recommendation-panel {
+        padding: 1.5rem;
+    }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+    .emblem-img {
+        animation: none;
+    }
+}
+
+.nav-link:focus,
+.rank-btn:focus,
+.btn-dungeon:focus {
+    outline: 2px solid var(--color-blood);
+    outline-offset: 2px;
+}
