@@ -1,4 +1,4 @@
-const RANK_ORDER = ["E", "D", "C", "B", "A", "S", "SS"];
+import { RANK_ORDER, getNextRank } from "../dungeon/config.js";
 
 export function evaluateRankProgression({ player, attempt }) {
     if (!attempt.isBoss || !attempt.passed || attempt.avgScore < 6) {
