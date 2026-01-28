@@ -1,0 +1,26 @@
+
+> server@1.0.0 dev
+> node src/server.js
+
+🧙 Guild Server running on port 3001
+Guild progression error: PrismaClientInitializationError: 
+Invalid `prisma.player.findUnique()` invocation:
+
+
+error: Environment variable not found: DATABASE_URL.
+  -->  schema.prisma:7
+   | 
+ 6 |   provider = "mongodb"
+ 7 |   url      = env("DATABASE_URL")
+   | 
+
+Validation Error Count: 1
+    at ei.handleRequestError (/Users/Apple/Desktop/resume/Ani-Interview/server/node_modules/@prisma/client/runtime/library.js:121:7568)
+    at ei.handleAndLogRequestError (/Users/Apple/Desktop/resume/Ani-Interview/server/node_modules/@prisma/client/runtime/library.js:121:6593)
+    at ei.request (/Users/Apple/Desktop/resume/Ani-Interview/server/node_modules/@prisma/client/runtime/library.js:121:6300)
+    at async a (/Users/Apple/Desktop/resume/Ani-Interview/server/node_modules/@prisma/client/runtime/library.js:130:9551)
+    at async file:///Users/Apple/Desktop/resume/Ani-Interview/server/src/api/guild/guild.routes.js:28:20 {
+  clientVersion: '6.19.2',
+  errorCode: undefined,
+  retryable: undefined
+}

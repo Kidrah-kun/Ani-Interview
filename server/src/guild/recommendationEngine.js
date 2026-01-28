@@ -42,6 +42,14 @@ function recommendNextStep({ analysis, rank }) {
     };
   }
 
+  // Prerequisite rule: Must clear 2 fundamentals
+  if (analysis.clearedFundamentals < 2) {
+    return {
+      type: COMMISSIONS.FUNDAMENTALS,
+      reason: `Must clear 2 fundamental dungeons (Current: ${analysis.clearedFundamentals})`,
+    };
+  }
+
   // Default: allow boss attempt
   return {
     type: COMMISSIONS.BOSS_RETRY,

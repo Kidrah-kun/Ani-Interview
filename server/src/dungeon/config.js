@@ -1,12 +1,12 @@
 export const DUNGEON_CONFIG = {
   E: {
     questionCount: 3,
-    strictness: 3,
-    passScore: 5
+    strictness: 50,
+    passScore: 50
   },
   D: {
     questionCount: 4,
-    strictness: 5,
-    passScore: 6
+    strictness: 60,
+    passScore: 60
   }
 };

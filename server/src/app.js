@@ -4,7 +4,7 @@ import dungeonRoutes from "./api/dungeon/dungeon.routes.js";
 import healthRoutes from "./api/health.routes.js";
 import playerRoutes from "./api/player/player.routes.js";
 // import bossRoutes from "./api/boss/boss.routes.js";
-// import guildRoutes from "./api/guild/guild.routes.js";
+import guildRoutes from "./api/guild/guild.routes.js";
 
 const app = express();
 
@@ -17,6 +17,7 @@ app.use(express.json());
 /**
  * Routes
  */
+app.use("/api/guild", guildRoutes);
 app.use("/api/health", healthRoutes);
 app.use("/api/player", playerRoutes);
 app.use("/api/dungeon", dungeonRoutes);

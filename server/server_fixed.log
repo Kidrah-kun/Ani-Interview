@@ -1,0 +1,6 @@
+
+> server@1.0.0 dev
+> node src/server.js
+
+[dotenv@17.2.3] injecting env (1) from src/.env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+🧙 Guild Server running on port 3001
