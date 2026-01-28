@@ -21,16 +21,15 @@ model DungeonAttempt {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   playerId  String   @db.ObjectId
 
-  rank      String               // Rank at time of attempt
-  role      String               // Backend Engineer, etc.
+  rank      String
+  class     String
   isBoss    Boolean @default(false)
 
-  avgScore  Float
-  passed    Boolean
+  avgScore  Float   @default(0)
+  passed    Boolean @default(false)
 
-  // ====== ANALYTICS / DASHBOARD ======
-  weakAreas    String[]           // ["Indexing", "System Design"]
-  questionMeta Json               // compressed per-question data
+  weakAreas    String[]
+  questionMeta Json
 
   createdAt DateTime @default(now())
 

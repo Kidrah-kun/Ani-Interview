@@ -1,4 +1,4 @@
-export function analyzeAttempts(attempts) {
+export function analyzePlayer(attempts) {
   const analysis = {
     avgScore: 0,
     failedBoss: false,
@@ -16,7 +16,7 @@ export function analyzeAttempts(attempts) {
       analysis.failedBoss = true;
     }
 
-    for (const weakness of attempt.weakAreas) {
+    for (const weakness of attempt.weakAreas || []) {
       analysis.weaknessCount[weakness] =
         (analysis.weaknessCount[weakness] || 0) + 1;
     }
