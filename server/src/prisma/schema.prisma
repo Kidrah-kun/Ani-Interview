@@ -21,7 +21,7 @@ model DungeonAttempt {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   playerId  String   @db.ObjectId
   rank      String
-  class     String
+  class     String?
   isBoss    Boolean @default(false)
   mode      String  @default("PROGRESSION")
   avgScore  Float   @default(0)

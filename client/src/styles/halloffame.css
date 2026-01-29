@@ -1,0 +1,311 @@
+/* =============================================
+   HALL OF FAME - Dark Fantasy Theme
+   ============================================= */
+
+.hall-page {
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+    font-family: 'Cinzel', serif;
+    color: #e0e0e0;
+    overflow-x: hidden;
+}
+
+.hall-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background:
+        linear-gradient(180deg, rgba(10, 12, 16, 0.85) 0%, rgba(10, 12, 16, 0.7) 100%),
+        url('/assets/dungeons_hall_bg.png');
+    background-size: cover;
+    background-position: center bottom;
+    filter: contrast(1.1) brightness(0.8);
+}
+
+.hall-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4rem 2rem;
+    min-height: calc(100vh - 80px);
+    /* Adjust for navbar */
+    perspective: 1000px;
+}
+
+/* =============================================
+   LEADERBOARD FRAME (The "Stone Tablet")
+   ============================================= */
+.leaderboard-frame {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    background:
+        linear-gradient(to bottom, rgba(30, 32, 36, 0.95), rgba(20, 22, 26, 0.98)),
+        url('/assets/ui/ui_panel_texture.jpeg');
+    background-blend-mode: multiply;
+    border: 1px solid #444;
+    border-radius: 8px;
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.8),
+        0 0 0 1px rgba(0, 0, 0, 1),
+        /* Inner black line */
+        0 0 0 6px #2a2a2a,
+        /* Dark Grey Frame */
+        0 0 0 8px #111,
+        /* Outer black line */
+        0 0 30px rgba(0, 0, 0, 0.5);
+    /* Soft outer glow */
+    padding: 0;
+    overflow: hidden;
+    /* Metal bevel effect */
+    border-image: linear-gradient(to bottom, #555, #222) 1;
+}
+
+/* Header */
+.frame-header {
+    background: linear-gradient(to bottom, #25282c, #1a1c20);
+    padding: 1.5rem;
+    text-align: center;
+    border-bottom: 2px solid #000;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.header-title {
+    font-size: 2rem;
+    letter-spacing: 4px;
+    color: #ccc;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 1);
+    margin: 0;
+    font-weight: 700;
+    background: linear-gradient(180deg, #fff 0%, #aaa 50%, #666 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.header-ornament {
+    width: 40px;
+    height: 2px;
+    background: #666;
+    position: relative;
+}
+
+.header-ornament::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #8a0b0b;
+    /* Red gem accent */
+    transform: rotate(45deg);
+    top: -4px;
+}
+
+.header-ornament.left::after {
+    right: -5px;
+}
+
+.header-ornament.right::after {
+    left: -5px;
+}
+
+/* Table Columns */
+.table-header {
+    display: grid;
+    grid-template-columns: 0.8fr 2.5fr 1.5fr 0.8fr;
+    padding: 1rem 2rem;
+    font-size: 0.8rem;
+    color: #666;
+    letter-spacing: 2px;
+    border-bottom: 1px solid #333;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.col-rank {
+    text-align: center;
+}
+
+.col-name {
+    text-align: left;
+    padding-left: 1rem;
+}
+
+.col-title {
+    text-align: right;
+    padding-right: 1rem;
+    color: #888;
+}
+
+.col-score {
+    text-align: center;
+}
+
+/* List Rows */
+.leaderboard-list {
+    max-height: 500px;
+    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.leaderboard-row {
+    display: grid;
+    grid-template-columns: 0.8fr 2.5fr 1.5fr 0.8fr;
+    padding: 1.2rem 2rem;
+    align-items: center;
+    border-bottom: 1px solid #2a2a2a;
+    transition: all 0.2s ease;
+    cursor: default;
+}
+
+.leaderboard-row:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+/* Top Tier Styling */
+.leaderboard-row.top-tier {
+    background: rgba(138, 11, 11, 0.05);
+    /* Slight red tint */
+    border-bottom: 1px solid rgba(138, 11, 11, 0.2);
+}
+
+.leaderboard-row.rank-1 .col-name {
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+.leaderboard-row.rank-2 .col-name {
+    color: #c0c0c0;
+    text-shadow: 0 0 10px rgba(192, 192, 192, 0.3);
+}
+
+.leaderboard-row.rank-3 .col-name {
+    color: #cd7f32;
+    text-shadow: 0 0 10px rgba(205, 127, 50, 0.3);
+}
+
+/* Column Contents */
+.rank-number {
+    font-size: 1.1rem;
+    color: #888;
+    font-weight: 700;
+}
+
+.rank-icon {
+    font-size: 1.2rem;
+    margin-right: 0.5rem;
+}
+
+.player-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.guild-tag {
+    font-size: 0.7rem;
+    color: #666;
+    margin-left: 0.8rem;
+    text-transform: uppercase;
+    border: 1px solid #444;
+    padding: 1px 4px;
+    border-radius: 2px;
+}
+
+.score-badge {
+    font-weight: 700;
+    color: #ccc;
+}
+
+/* Footer */
+.frame-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    background: linear-gradient(to top, #1a1c20, #25282c);
+    border-top: 2px solid #000;
+}
+
+.current-player-status {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.9rem;
+}
+
+.current-player-status .label {
+    color: #666;
+}
+
+.current-player-status .value {
+    color: #fff;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.footer-btn {
+    background: transparent;
+    border: 1px solid #444;
+    color: #888;
+    padding: 0.5rem 1rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.footer-btn:hover {
+    border-color: #888;
+    color: #ccc;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.footer-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+/* Corner Decorations (Gargoyle/Dragon heads concept) */
+.corner-decor {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #666;
+    z-index: 10;
+}
+
+.top-left {
+    top: 0;
+    left: 0;
+    border-right: none;
+    border-bottom: none;
+}
+
+.top-right {
+    top: 0;
+    right: 0;
+    border-left: none;
+    border-bottom: none;
+}
+
+.bottom-left {
+    bottom: 0;
+    left: 0;
+    border-right: none;
+    border-top: none;
+}
+
+.bottom-right {
+    bottom: 0;
+    right: 0;
+    border-left: none;
+    border-top: none;
+}

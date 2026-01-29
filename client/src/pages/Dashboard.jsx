@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import Navbar from '../components/Navbar'
 import { getDashboard, getProgression } from '../api/client'
 import '../styles/dashboard.css'
 
@@ -87,7 +88,7 @@ function Dashboard() {
     }
 
     const handleEnterDungeon = () => {
-        alert('Dungeon system coming soon, Hunter!')
+        navigate('/dungeons')
     }
 
     return (
@@ -97,28 +98,7 @@ function Dashboard() {
             <div className="vignette"></div>
 
             {/* Navigation */}
-            <nav className="navbar">
-                <div className="nav-left">
-                    <Link to="/" className="nav-logo">
-                        <img src="/assets/dragon_logo.png" alt="Logo" className="logo-img" />
-                        <span className="logo-text">ANI-INTERVIEW</span>
-                    </Link>
-                </div>
-
-                <div className="nav-center">
-                    <Link to="/dashboard" className="nav-link active">Dashboard</Link>
-                    <a href="#" className="nav-link">Dungeons</a>
-                    <a href="#" className="nav-link">Records</a>
-                    <a href="#" className="nav-link">Hall of Fame</a>
-                </div>
-
-                <div className="nav-right">
-                    <button className="rank-btn">
-                        <span className="rank-badge-small">{playerData.rank}</span>
-                        <span>Rank</span>
-                    </button>
-                </div>
-            </nav>
+            <Navbar />
 
             {/* Main Content */}
             <main className="main-content">

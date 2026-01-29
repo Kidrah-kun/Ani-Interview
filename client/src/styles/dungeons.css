@@ -1,0 +1,416 @@
+/* =============================================
+   DUNGEON SELECTION PAGE - Solo Leveling Refined Theme
+   Matches Reference Image
+   ============================================= */
+
+/* Base Page */
+.dungeons-page {
+    height: 100vh;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    font-family: 'Cinzel', 'Times New Roman', serif;
+    color: #e0e0e0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 1;
+}
+
+/* Background */
+.dungeons-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background:
+        /* Darker, grittier overlay for Berserk feel */
+        linear-gradient(180deg, rgba(8, 5, 8, 0.85) 0%, rgba(15, 8, 10, 0.7) 60%, rgba(20, 10, 12, 0.9) 100%),
+        url('/assets/dungeons/dungeon_easy.png');
+    background-size: cover;
+    background-position: center;
+}
+
+/* Navbar styles handled by navbar.css */
+
+/* =============================================
+   MAIN CONTENT
+   ============================================= */
+.dungeons-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem 3rem 4rem;
+}
+
+/* Page Header */
+.page-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.page-title {
+    font-size: 2.8rem;
+    font-weight: 500;
+    color: #e0e0e0;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 0 0 0.5rem;
+    text-shadow: 0 4px 10px rgba(0, 0, 0, 0.9);
+}
+
+.page-subtitle {
+    font-size: 1rem;
+    color: #888;
+    font-style: italic;
+    font-family: 'Times New Roman', serif;
+}
+
+/* Status Bar - Center Screen */
+.status-bar {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: rgba(10, 10, 10, 0.8);
+    border: 1px solid #333;
+    padding: 0.5rem 1.2rem;
+    border-radius: 2px;
+    min-width: 180px;
+    justify-content: space-between;
+}
+
+.status-label {
+    font-size: 0.75rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-value {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #ccc;
+}
+
+.status-value.locked {
+    color: #8a0b0b;
+    /* Dark red */
+}
+
+/* Recommendation Banner - Blood Red */
+.recommendation-banner {
+    background: linear-gradient(90deg, transparent, rgba(114, 10, 10, 0.6), transparent);
+    /* Deep blood red */
+    padding: 1.2rem;
+    text-align: center;
+    margin-bottom: 3rem;
+    border-top: 1px solid #4a0000;
+    border-bottom: 1px solid #4a0000;
+    box-shadow: none;
+    backdrop-filter: blur(2px);
+    border-radius: 0;
+}
+
+.rec-label {
+    display: block;
+    font-size: 0.7rem;
+    color: #8a0b0b;
+    /* Dark red text */
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+    opacity: 0.9;
+    font-weight: bold;
+}
+
+.rec-text {
+    font-size: 1.1rem;
+    color: #d0d0d0;
+    font-style: italic;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* =============================================
+   RANK SECTIONS
+   ============================================= */
+.rank-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+}
+
+.rank-badge {
+    background: #8a0b0b;
+    /* Blood red badge */
+    color: #fff;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.8rem;
+    border-radius: 0;
+    /* Square/Sharp */
+}
+
+.rank-title {
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: #eee;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.locked-indicator {
+    margin-left: auto;
+    font-size: 0.8rem;
+    color: #444;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* =============================================
+   DUNGEON CARDS
+   ============================================= */
+.dungeon-cards {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-bottom: 4rem;
+}
+
+.dungeon-card {
+    width: 340px;
+    /* Slightly wider */
+    height: 380px;
+    /* Taller for image */
+    background: #050505;
+    border: 1px solid #222;
+    border-radius: 2px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    /* Stack from top */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.card-image-container {
+    height: 160px;
+    width: 100%;
+    position: relative;
+    border-bottom: 1px solid #222;
+}
+
+.card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.7;
+    filter: grayscale(40%) contrast(120%);
+    transition: all 0.5s ease;
+}
+
+.card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, #050505, transparent);
+}
+
+.card-content {
+    padding: 1rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: space-between;
+}
+
+/* Hover & Active States */
+/* Hover & Active States */
+.dungeon-card:hover:not(.locked) {
+    border-color: #8a0b0b;
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9), 0 0 15px rgba(138, 11, 11, 0.2);
+}
+
+.dungeon-card:hover:not(.locked) .card-image {
+    opacity: 1;
+    filter: grayscale(0%) contrast(110%);
+    transform: scale(1.05);
+}
+
+.dungeon-card.cleared {
+    border-color: #2e5c3e;
+    /* Muted green */
+}
+
+.dungeon-card.locked {
+    opacity: 0.5;
+    cursor: not-allowed;
+    border-color: #222;
+    background: #0a0a0a;
+}
+
+/* Card Header */
+/* Card Header */
+.card-header {
+    padding: 0;
+    border-bottom: none;
+    margin-bottom: 0.5rem;
+}
+
+.card-title {
+    font-size: 1.1rem;
+    color: #e0e0e0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    font-family: 'Cinzel', serif;
+}
+
+/* Card Body - Rank Square */
+/* Card Body - Rank Square */
+.card-body {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+}
+
+.rank-square {
+    width: 60px;
+    height: 60px;
+    background: rgba(40, 0, 0, 0.3);
+    border: 1px solid #5a1a1a;
+    /* Dark blood border */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0;
+    /* Sharp square */
+}
+
+/* Boss/Highlighted Square - Filled */
+.dungeon-card:first-child .rank-square {
+    background: #5a0b0b;
+    /* Deep blood red fill */
+    border: 1px solid #7a1a1a;
+    box-shadow: 0 0 10px rgba(100, 0, 0, 0.3);
+}
+
+.dungeon-card:first-child .rank-letter {
+    color: #e0e0e0;
+}
+
+.rank-letter {
+    font-size: 1.8rem;
+    color: #5a1a1a;
+    /* Dark red text usually */
+    font-family: 'Cinzel', serif;
+}
+
+.dungeon-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.dungeon-type {
+    font-size: 0.75rem;
+    color: #8a0b0b;
+    /* Dark red accent */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+.dungeon-questions {
+    font-size: 0.85rem;
+    color: #888;
+    font-style: italic;
+}
+
+/* Card Footer */
+/* Card Footer */
+.card-footer {
+    padding-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    margin-top: auto;
+}
+
+.availability {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+.availability.available {
+    color: #888;
+}
+
+.availability.cleared {
+    color: #2e5c3e;
+}
+
+.availability.locked {
+    color: #444;
+}
+
+.lock-icon-overlay {
+    font-size: 1.2rem;
+    opacity: 0.3;
+}
+
+/* Your Rank Indicator - Floating Right */
+.your-rank-indicator {
+    position: fixed;
+    right: 4rem;
+    top: 55%;
+    transform: translateY(-50%);
+}
+
+.your-rank-btn {
+    background: transparent;
+    border: 1px solid #2e5c3e;
+    /* Muted green */
+    color: #2e5c3e;
+    padding: 0.5rem 1.5rem;
+    font-family: inherit;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: default;
+    border-radius: 0;
+    background: rgba(0, 10, 0, 0.6);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .your-rank-indicator {
+        position: static;
+        margin: 2rem 0;
+        display: flex;
+        justify-content: center;
+    }
+
+    .status-bar {
+        flex-wrap: wrap;
+    }
+}

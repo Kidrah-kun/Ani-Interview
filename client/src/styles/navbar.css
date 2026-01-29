@@ -1,0 +1,125 @@
+/* Navbar Container */
+.main-navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 3rem;
+    background: rgba(10, 10, 12, 0.8);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Left: Logo */
+.nav-left {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+}
+
+.nav-logo:hover {
+    opacity: 0.8;
+}
+
+.logo-img {
+    height: 40px;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.3));
+}
+
+.logo-text {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    color: #e0e0e0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Center: Links */
+.nav-center {
+    display: flex;
+    gap: 3rem;
+    justify-content: center;
+    flex: 2;
+}
+
+.nav-link {
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+    position: relative;
+    padding-bottom: 5px;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #e0e0e0;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+.nav-link.active {
+    color: #fff;
+    font-weight: 700;
+    border-bottom: 2px solid #a83232;
+    /* Dark red accent */
+}
+
+/* Right: Rank Display */
+.nav-right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex: 1;
+}
+
+.rank-display-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid #444;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    /* Slightly boxy for RPG feel */
+    color: #ccc;
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    cursor: default;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.rank-display-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: #666;
+}
+
+.rank-badge-small {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    background: #8b8b8b;
+    /* Default gray */
+    border-radius: 2px;
+    /* Square Badge */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}

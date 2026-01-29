@@ -1,0 +1,258 @@
+/* =============================================
+   RECORDS PAGE - Dark Fantasy Theme
+   ============================================= */
+
+.records-page {
+    height: 100vh;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    font-family: 'Cinzel', 'Times New Roman', serif;
+    color: #e0e0e0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 1;
+}
+
+.records-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background:
+        linear-gradient(180deg, rgba(8, 5, 8, 0.9) 0%, rgba(15, 8, 10, 0.8) 60%, rgba(20, 10, 12, 0.95) 100%),
+        url('/assets/dungeons_hall_bg.png');
+    background-size: cover;
+    background-position: center;
+}
+
+/* Reusing Top Nav styles from dungeons.css (ensure consistency via global styles or copy) */
+/* Ideally, move shared nav styles to a global file, but for now assuming independent load */
+
+.records-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 3rem 4rem;
+}
+
+.records-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.records-container {
+    background:
+        linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.85)),
+        url('/assets/ui/ui_panel_texture.jpeg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    /* Heavy double-layered border to mimic the reference frame */
+    border: 12px solid #2e2e2e;
+    border-image: linear-gradient(to bottom, #555, #1a1a1a, #555) 1;
+    outline: 2px solid #555;
+    /* Inner metal edge */
+    box-shadow:
+        0 0 100px rgba(0, 0, 0, 1),
+        inset 0 0 80px rgba(0, 0, 0, 0.9),
+        0 0 0 10px #080808;
+    /* Outer dark rim */
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 3.5rem;
+    border-radius: 4px;
+}
+
+/* Vertical Rune Pillars (Side decorations) */
+.records-container::before,
+.records-container::after {
+    content: '';
+    position: absolute;
+    top: 50px;
+    bottom: 50px;
+    width: 4px;
+    border-left: 1px dashed rgba(100, 100, 100, 0.3);
+    /* Abstract runes */
+    border-right: 1px dashed rgba(100, 100, 100, 0.3);
+    pointer-events: none;
+}
+
+.records-container::before {
+    left: 15px;
+}
+
+.records-container::after {
+    right: 15px;
+}
+
+/* Table Styles */
+.records-table-wrapper {
+    overflow-x: auto;
+}
+
+.records-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 0.5rem;
+    text-align: left;
+}
+
+.records-table th {
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    color: #b0b0b0;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    padding: 1.2rem;
+    border-bottom: 3px double #444;
+    /* Heavier divider */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 1);
+    background: linear-gradient(to bottom, #2a2a2a, #1a1a1a);
+    border-top: 1px solid #3a3a3a;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.records-table tbody tr {
+    background: url('/assets/ui/ui_panel_texture.jpeg');
+    background-size: cover;
+    background-blend-mode: multiply;
+    background-color: rgba(0, 0, 0, 0.8);
+    transition: all 0.3s ease;
+    animation: fadeIn 0.5s ease backwards;
+    /* Distinct Slab Look */
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.08),
+        0 4px 6px rgba(0, 0, 0, 0.6);
+    border-bottom: 6px solid transparent;
+    /* Gap between rows handled by spacing, but adding border for visual gap */
+    margin-bottom: 8px;
+    /* Spacing */
+    border: 1px solid #333;
+}
+
+.records-table tbody tr:hover {
+    background-color: rgba(30, 30, 30, 0.7);
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7);
+    border-color: #555;
+    z-index: 5;
+}
+
+.records-table td {
+    padding: 1.1rem 1.5rem;
+    font-family: 'Times New Roman', serif;
+    color: #ccc;
+    font-size: 1.05rem;
+    border-top: 1px solid #333;
+    border-bottom: 1px solid #111;
+}
+
+.records-table td:first-child {
+    border-left: 3px solid #333;
+    /* Default border */
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+}
+
+.records-table td:last-child {
+    border-right: 1px solid #333;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+
+/* Status Styles */
+.status-cell {
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.status-icon {
+    font-size: 1.2rem;
+}
+
+/* Status Glows - Enhanced */
+.record-row.victory td:first-child {
+    border-left: 3px solid #4a9c5d;
+    /* Green Bar */
+    box-shadow: inset 10px 0 20px -10px rgba(74, 156, 93, 0.2);
+}
+
+.record-row.victory .status-cell {
+    color: #5bbd70;
+    text-shadow: 0 0 10px rgba(91, 189, 112, 0.5);
+}
+
+.record-row.defeat td:first-child {
+    border-left: 3px solid #b33939;
+    /* Red Bar */
+    box-shadow: inset 10px 0 20px -10px rgba(179, 57, 57, 0.2);
+}
+
+.record-row.defeat .status-cell {
+    color: #d14949;
+    text-shadow: 0 0 10px rgba(209, 73, 73, 0.5);
+}
+
+.dungeon-name {
+    font-weight: 500;
+    color: #eee;
+    letter-spacing: 0.5px;
+}
+
+.rank-tag {
+    background: #333;
+    padding: 0.2rem 0.6rem;
+    border-radius: 2px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    border: 1px solid #555;
+}
+
+.score-cell {
+    font-family: 'Cinzel', serif;
+    letter-spacing: 1px;
+}
+
+/* Loading */
+.loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+    color: #888;
+}
+
+.loading-spinner {
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-top: 3px solid #8a0b0b;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
