@@ -46,8 +46,13 @@ body {
    DASHBOARD CONTAINER
    ============================================ */
 .dashboard-container {
-    min-height: 100vh;
+    height: 100vh;
+    width: 100vw;
+    overflow-y: auto;
+    overflow-x: hidden;
     position: relative;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-gold) var(--color-shadow);
 }
 
 .dashboard-bg {
@@ -314,6 +319,60 @@ body {
 }
 
 /* ============================================
+   GUILD REGULATIONS PANEL
+   ============================================ */
+.rules-panel {
+    padding: 2.5rem;
+    max-width: 600px;
+    margin: 0 auto;
+    border-color: rgba(201, 162, 39, 0.4); /* Gold dim accent */
+}
+
+.rules-title {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--color-gold);
+    margin-bottom: 1.5rem;
+    text-align: center;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(201, 162, 39, 0.3);
+    padding-bottom: 1rem;
+}
+
+.rules-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.rule-item {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--color-parchment);
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.rule-item::before {
+    content: "◈";
+    position: absolute;
+    left: 0;
+    color: var(--color-blood-glow);
+    font-size: 0.8rem;
+    top: 3px;
+}
+
+.rule-highlight {
+    font-weight: bold;
+    color: var(--color-bone);
+    font-family: var(--font-display);
+    letter-spacing: 0.05em;
+}
+
+/* ============================================
    EMBLEM PANEL (RIGHT)
    ============================================ */
 .emblem-panel {
@@ -377,18 +436,6 @@ body {
 }
 
 @media (max-width: 768px) {
-    .navbar {
-        padding: 0 1rem;
-    }
-
-    .nav-center {
-        display: none;
-    }
-
-    .logo-text {
-        display: none;
-    }
-
     .main-content {
         padding: 80px 1rem 1rem;
     }

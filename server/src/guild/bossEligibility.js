@@ -1,26 +1,35 @@
 /**
- * Boss cooldown duration in minutes
- * Player must wait this long after a failed boss attempt
+ * BOSS UNLOCK RULES:
+ * - Player must have cleared at least 1 fundamental (normal) dungeon at their rank
+ * - Player must have cleared at least 5 dungeons total at their rank (any type)
+ * - Boss cooldown of 30 min after a failed attempt
  */
 const BOSS_COOLDOWN_MINUTES = 30;
+const DUNGEONS_REQUIRED_FOR_BOSS = 5;
 
-/**
- * Check if player is eligible to fight the rank boss
- */
-export function canFightBoss({ analysis, recommendation }) {
-  // Check if training is complete
-  if (recommendation.type.id !== "boss_retry") {
+export function canFightBoss({ analysis }) {
+  // Rule 1: Must have completed the fundamental dungeon at least once
+  if (!analysis.fundamentalCleared) {
     return {
       allowed: false,
-      reason: "Training incomplete - complete required dungeons first"
+      reason: "Guild Master requires completion of Fundamentals Dungeon",
     };
   }
 
-  // Check for boss cooldown after failure
+  // Rule 2: Must have completed 5 dungeons total at this rank
+  if (analysis.totalDungeonsCleared < DUNGEONS_REQUIRED_FOR_BOSS) {
+    const remaining = DUNGEONS_REQUIRED_FOR_BOSS - analysis.totalDungeonsCleared;
+    return {
+      allowed: false,
+      reason: `Complete ${remaining} more dungeon(s) to unlock the Boss (${analysis.totalDungeonsCleared}/${DUNGEONS_REQUIRED_FOR_BOSS})`,
+    };
+  }
+
+  // Rule 3: Boss cooldown after a failed attempt
   if (analysis.lastBossFailure) {
     const lastFailure = new Date(analysis.lastBossFailure);
     const now = new Date();
-    const minutesSinceFailure = (now - lastFailure) / (1000 * 60);
+    const minutesSinceFailure = (now.getTime() - lastFailure.getTime()) / (1000 * 60);
 
     if (minutesSinceFailure < BOSS_COOLDOWN_MINUTES) {
       const remainingMinutes = Math.ceil(BOSS_COOLDOWN_MINUTES - minutesSinceFailure);
@@ -28,30 +37,19 @@ export function canFightBoss({ analysis, recommendation }) {
         allowed: false,
         reason: `Boss cooldown active. Try again in ${remainingMinutes} minute(s).`,
         cooldownRemaining: remainingMinutes,
-        cooldownEnds: new Date(lastFailure.getTime() + BOSS_COOLDOWN_MINUTES * 60 * 1000)
+        cooldownEnds: new Date(lastFailure.getTime() + BOSS_COOLDOWN_MINUTES * 60 * 1000),
       };
     }
-  }
-
-  // Check minimum score requirement
-  if (analysis.avgScore < 6) {
-    return {
-      allowed: false,
-      reason: "Average score too low for boss attempt (need 6+)"
-    };
   }
 
   return {
     allowed: true,
     reason: "Boss fight authorized! Good luck, Hunter! 🎯",
-    streak: analysis.streakBonus
+    streak: analysis.streakBonus,
   };
 }
 
-/**
- * Export cooldown config for use elsewhere
- */
 export const BOSS_CONFIG = {
-  cooldownMinutes: BOSS_COOLDOWN_MINUTES
+  cooldownMinutes: BOSS_COOLDOWN_MINUTES,
+  dungeonsRequired: DUNGEONS_REQUIRED_FOR_BOSS,
 };
-

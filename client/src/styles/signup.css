@@ -39,7 +39,6 @@
 html,
 body {
     height: 100%;
-    overflow: hidden;
 }
 
 body {
@@ -373,6 +372,34 @@ body {
     text-align: center;
     opacity: 0.7;
     margin-bottom: 2rem;
+}
+
+.auth-toggle {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.toggle-btn {
+    background: transparent;
+    border: none;
+    color: #666;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-bottom: 2px solid transparent;
+}
+
+.toggle-btn.active {
+    color: #fff;
+    border-bottom: 2px solid var(--color-blood);
+}
+
+.toggle-btn:hover {
+    color: #aaa;
 }
 
 .register-form {

@@ -67,29 +67,20 @@ function recommendNextStep({ analysis, rank }) {
     };
   }
 
-  // Rule 4: Prerequisite - Must clear 2 fundamentals
-  if (analysis.clearedFundamentals < 2) {
+  // Rule 4: Must clear the Fundamentals Dungeon (1 required)
+  if (!analysis.fundamentalCleared) {
     return {
       type: COMMISSIONS.FUNDAMENTALS,
-      reason: `Must clear 2 fundamental dungeons (Current: ${analysis.clearedFundamentals}/2)`,
+      reason: "Complete the Fundamentals Dungeon to begin your journey",
     };
   }
 
-  // Rule 5: Streak-aware recommendation for boss readiness
-  if (analysis.currentStreak >= 3) {
-    return {
-      type: COMMISSIONS.BOSS_RETRY,
-      reason: `${analysis.streakBonus?.label || "Hot streak!"} You're ready for the boss!`,
-      streak: analysis.currentStreak,
-    };
-  }
-
-  // Rule 6: Offer warmup before boss if fundamentals cleared
-  if (analysis.clearedFundamentals >= 2 && analysis.currentStreak < 2) {
+  // Rule 5: Need 5 total dungeon clears to unlock boss
+  if (analysis.totalDungeonsCleared < 5) {
+    const remaining = 5 - analysis.totalDungeonsCleared;
     return {
       type: COMMISSIONS.WARMUP,
-      reason: "Optional warmup before boss challenge",
-      alternative: COMMISSIONS.BOSS_RETRY,
+      reason: `Complete ${remaining} more dungeon(s) to unlock the Boss (${analysis.totalDungeonsCleared}/5)`,
     };
   }
 

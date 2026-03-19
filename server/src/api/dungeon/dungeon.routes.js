@@ -42,6 +42,13 @@ router.post("/access", async (req, res) => {
       });
     }
 
+    if (!playerId.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(404).json({
+        allowed: false,
+        reason: "Player not found",
+      });
+    }
+
     const player = await prisma.player.findUnique({
       where: { id: playerId },
     });
@@ -99,7 +106,7 @@ router.post("/access", async (req, res) => {
 
     // Boss access is a HARD rule
     if (isBoss) {
-      const bossCheck = canFightBoss({ analysis, recommendation });
+      const bossCheck = canFightBoss({ analysis });
       if (!bossCheck.allowed) {
         return res.json({
           allowed: false,
@@ -112,6 +119,7 @@ router.post("/access", async (req, res) => {
     const access = canAccessDungeon({
       dungeonType,
       recommendation,
+      isBoss,
     });
 
     return res.json({
@@ -151,6 +159,10 @@ router.post("/start", async (req, res) => {
 
     if (!playerId || !dungeonType) {
       return res.status(400).json({ error: "Missing fields" });
+    }
+
+    if (!playerId.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(404).json({ error: "Player not found" });
     }
 
     const player = await prisma.player.findUnique({
@@ -279,7 +291,7 @@ router.post("/start", async (req, res) => {
 
   } catch (err) {
     console.error("Dungeon start error:", err);
-    return res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: "Internal server error", details: err.message, stack: err.stack });
   }
 });
 
@@ -315,6 +327,10 @@ router.post("/submit", async (req, res) => {
       });
     }
 
+    if (!attemptId.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(404).json({ error: "Dungeon attempt not found" });
+    }
+
     const attempt = await prisma.dungeonAttempt.findUnique({
       where: { id: attemptId },
     });
@@ -332,7 +348,9 @@ router.post("/submit", async (req, res) => {
     }
 
     // Build valid questionId set for validation
-    const validQuestionIds = new Set(attempt.questionMeta.map(q => q.id));
+    /** @type {any[]} */
+    const questionMetaArray = Array.isArray(attempt.questionMeta) ? attempt.questionMeta : [];
+    const validQuestionIds = new Set(questionMetaArray.map(q => q.id));
 
     // Validate all questionIds BEFORE processing
     const invalidIds = [];
@@ -358,7 +376,7 @@ router.post("/submit", async (req, res) => {
 
     // Process each answer
     for (const ans of answers) {
-      const meta = attempt.questionMeta.find(q => q.id === ans.questionId);
+      const meta = questionMetaArray.find(q => q.id === ans.questionId);
 
       // Get answer text (support both answerText and answer for backwards compat)
       const answerText = ans.answerText || ans.answer || "";
@@ -463,7 +481,7 @@ router.post("/submit", async (req, res) => {
         passThreshold,
         margin: normalizedAvgScore - passThreshold,
         questionsAnswered: answeredCount,
-        questionsTotal: attempt.questionMeta.length
+        questionsTotal: questionMetaArray.length
       },
       weakAreas: Array.from(weakAreas),
       feedback,

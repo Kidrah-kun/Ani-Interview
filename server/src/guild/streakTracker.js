@@ -23,7 +23,7 @@ export function calculateStreak(attempts, currentRank) {
     // Sort by creation date (newest first)
     const sorted = [...attempts]
         .filter(a => a.mode === "PROGRESSION" && a.rank === currentRank)
-        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
     let streak = 0;
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import { getDungeonCatalog } from '../api/client'
 import '../styles/dungeons.css'
@@ -88,13 +88,20 @@ function Dungeons() {
     const [error, setError] = useState(null)
     const [catalog, setCatalog] = useState(null)
     const [playerRank, setPlayerRank] = useState('E')
-    const [fundamentalsCleared, setFundamentalsCleared] = useState(0)
-    const [totalFundamentals, setTotalFundamentals] = useState(2)
+    const [fundamentalsCleared, setFundamentalsCleared] = useState(false)
+    const [dungeonsCleared, setDungeonsCleared] = useState(0)
 
     useEffect(() => {
         const playerId = localStorage.getItem('playerId')
         const rank = localStorage.getItem('playerRank') || 'E'
         setPlayerRank(rank)
+
+        // Force logout if the user has a legacy fake ID (starts with SZ)
+        if (playerId && playerId.startsWith('SZ')) {
+            localStorage.clear();
+            navigate('/signup');
+            return;
+        }
 
         if (!playerId || playerId.length < 10) {
             navigate('/signup')
@@ -110,16 +117,23 @@ function Dungeons() {
             const data = await getDungeonCatalog(playerId)
             setCatalog(data)
 
-            // Calculate fundamentals cleared from catalog
-            if (data?.progressionDungeons) {
-                const cleared = data.progressionDungeons.filter(d => d.cleared && d.type === 'NORMAL').length
-                const total = data.progressionDungeons.filter(d => d.type === 'NORMAL').length
-                setFundamentalsCleared(cleared)
-                setTotalFundamentals(total || 2)
+            // Read new progression status from catalog response
+            if (data?.progressionStatus) {
+                setFundamentalsCleared(data.progressionStatus.fundamentalCleared || false)
+                setDungeonsCleared(data.progressionStatus.dungeonsCleared || 0)
+            } else if (data?.progressionDungeons) {
+                // fallback: count from dungeon list
+                const normalCleared = data.progressionDungeons.some(d => d.cleared && d.type === 'NORMAL')
+                setFundamentalsCleared(normalCleared)
             }
         } catch (err) {
             console.error('Failed to fetch dungeon catalog:', err)
-            setError('Failed to load dungeons. Please try again.')
+            if (err.message === 'Player not found') {
+                localStorage.clear();
+                navigate('/signup');
+            } else {
+                setError('Failed to load dungeons. Please try again.')
+            }
         } finally {
             setLoading(false)
         }
@@ -281,8 +295,14 @@ function Dungeons() {
                         <span className="status-value" style={{ color: getRankColor(playerRank) }}>{playerRank}</span>
                     </div>
                     <div className="status-item">
-                        <span className="status-label">Fundamentals Cleared</span>
-                        <span className="status-value">{fundamentalsCleared} / {totalFundamentals}</span>
+                        <span className="status-label">Fundamentals</span>
+                        <span className={`status-value ${fundamentalsCleared ? 'unlocked' : 'locked'}`}>
+                            {fundamentalsCleared ? '✓ Done' : 'Pending'}
+                        </span>
+                    </div>
+                    <div className="status-item">
+                        <span className="status-label">Dungeons Cleared</span>
+                        <span className="status-value">{dungeonsCleared} / 5</span>
                     </div>
                     <div className="status-item">
                         <span className="status-label">Boss Status</span>

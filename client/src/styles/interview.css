@@ -682,6 +682,11 @@
         font-size: 1.4rem;
     }
 
+    .interrogator-frame {
+        width: 120px;
+        height: 120px;
+    }
+
     .question-text {
         font-size: 1rem;
     }

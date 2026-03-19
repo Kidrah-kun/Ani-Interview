@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Navbar from '../components/Navbar'
 import { getLeaderboard } from '../api/client'
 import '../styles/halloffame.css'
@@ -7,37 +7,55 @@ function HallOfFame() {
     const [currentPlayer, setCurrentPlayer] = useState({
         name: 'Novice Hunter',
         rank: 'E',
-        title: 'Unknown'
     })
+    const [playerId, setPlayerId] = useState(null)
     const [leaderboardData, setLeaderboardData] = useState([])
     const [loading, setLoading] = useState(true)
+    const [page, setPage] = useState(1)
+    const [hasMore, setHasMore] = useState(false)
+    const [total, setTotal] = useState(0)
+    const [currentPlayerPosition, setCurrentPlayerPosition] = useState(null)
 
     useEffect(() => {
         const storedName = localStorage.getItem('playerName')
         const storedRank = localStorage.getItem('playerRank')
         const storedId = localStorage.getItem('playerId')
-
         if (storedName) {
-            setCurrentPlayer({
-                name: storedName,
-                rank: storedRank || 'E',
-                title: 'Current Player'
-            })
+            setCurrentPlayer({ name: storedName, rank: storedRank || 'E' })
         }
-
-        const fetchLeaderboard = async () => {
-            try {
-                const data = await getLeaderboard()
-                setLeaderboardData(data)
-            } catch (error) {
-                console.error("Failed to load leaderboard", error)
-            } finally {
-                setLoading(false)
-            }
-        }
-
-        fetchLeaderboard()
+        if (storedId) setPlayerId(storedId)
     }, [])
+
+    const fetchLeaderboard = useCallback(async (pageNum) => {
+        setLoading(true)
+        try {
+            const id = localStorage.getItem('playerId')
+            const data = await getLeaderboard(pageNum, id)
+            const players = Array.isArray(data) ? data : data.players
+            setLeaderboardData(players || [])
+            setHasMore(data.hasMore || false)
+            setTotal(data.total || players?.length || 0)
+            if (data.currentPlayerPosition) setCurrentPlayerPosition(data.currentPlayerPosition)
+        } catch (error) {
+            console.error("Failed to load leaderboard", error)
+        } finally {
+            setLoading(false)
+        }
+    }, [])
+
+    useEffect(() => {
+        fetchLeaderboard(page)
+    }, [page, fetchLeaderboard])
+
+    const handlePrev = () => {
+        if (page > 1) setPage(p => p - 1)
+    }
+
+    const handleNext = () => {
+        if (hasMore) setPage(p => p + 1)
+    }
+
+    const totalPages = Math.max(1, Math.ceil(total / 10))
 
     return (
         <div className="hall-page">
@@ -53,12 +71,12 @@ function HallOfFame() {
                         <div className="header-ornament right"></div>
                     </div>
 
-                    {/* Column Headers */}
                     <div className="table-header">
                         <span className="col-rank">RANK</span>
                         <span className="col-name">PLAYER NAME</span>
                         <span className="col-title">TITLE</span>
                         <span className="col-score">RANK</span>
+                        <span className="col-avg">SCORE</span>
                     </div>
 
                     {/* List */}
@@ -68,21 +86,32 @@ function HallOfFame() {
                         {!loading && leaderboardData.map((player) => (
                             <div key={player.id || player.rank} className={`leaderboard-row ${player.rank <= 3 ? 'top-tier' : ''} rank-${player.rank}`}>
                                 <div className="col-rank">
-                                    {player.rank === 1 && <span className="rank-icon first">👑</span>}
-                                    {player.rank === 2 && <span className="rank-icon second">🥈</span>}
-                                    {player.rank === 3 && <span className="rank-icon third">🥉</span>}
-                                    <span className="rank-number">{player.rank}.</span>
+                                    <div className="col-rank-cell">
+                                        {player.rank <= 3 && (
+                                            <span className="rank-icon">
+                                                {player.rank === 1 ? '👑' : player.rank === 2 ? '🥈' : '🥉'}
+                                            </span>
+                                        )}
+                                        <span className="rank-number">{player.rank}.</span>
+                                    </div>
                                 </div>
                                 <div className="col-name">
                                     <span className="player-name">{player.name}</span>
                                     <span className="guild-tag">{player.class}</span>
                                 </div>
-                                <div className="col-title">{player.title}</div>
-                                <div className="col-score">
+                                <div className="col-title col-title-cell">{player.title}</div>
+                                <div className="col-score col-rank-badge">
                                     <span className={`score-badge rank-${player.realRank}`}>{player.realRank}</span>
+                                </div>
+                                <div className="col-avg col-rank-badge">
+                                    <span className="score-badge" style={{ color: '#aaa', fontSize: '0.9rem' }}>{player.score || '0.0'}</span>
                                 </div>
                             </div>
                         ))}
+
+                        {!loading && leaderboardData.length === 0 && (
+                            <div className="loading-text">No hunters registered yet.</div>
+                        )}
                     </div>
 
                     {/* Footer / Current Player Status */}
@@ -90,15 +119,45 @@ function HallOfFame() {
                         <div className="current-player-status">
                             <span className="label">CURRENT PLAYER:</span>
                             <span className="value">{currentPlayer.name}</span>
-                            <span className={`rank-badge-mini rank-${currentPlayer.rank}`}>{currentPlayer.rank}</span>
+                            <span
+                                className="value"
+                                style={{
+                                    background: 'rgba(138,11,11,0.3)',
+                                    border: '1px solid #8a0b0b',
+                                    padding: '2px 10px',
+                                    borderRadius: '3px',
+                                    fontSize: '0.85rem',
+                                    letterSpacing: '2px'
+                                }}
+                            >
+                                {currentPlayer.rank} RANK
+                            </span>
+                            {currentPlayerPosition && (
+                                <span className="label" style={{ marginLeft: '0.5rem' }}>
+                                    #{currentPlayerPosition} of {total} hunters
+                                </span>
+                            )}
                         </div>
 
                         <div className="footer-actions">
-                            <button className="footer-btn">
-                                <span className="icon">📜</span> PREV PAGE
+                            <button
+                                className="footer-btn"
+                                onClick={handlePrev}
+                                disabled={page <= 1}
+                                style={{ opacity: page <= 1 ? 0.4 : 1, cursor: page <= 1 ? 'not-allowed' : 'pointer' }}
+                            >
+                                <span className="icon">◀</span> PREV PAGE
                             </button>
-                            <button className="footer-btn">
-                                NEXT PAGE <span className="icon">📜</span>
+                            <span className="value" style={{ alignSelf: 'center', fontSize: '0.8rem', color: '#555' }}>
+                                {page} / {totalPages}
+                            </span>
+                            <button
+                                className="footer-btn"
+                                onClick={handleNext}
+                                disabled={!hasMore}
+                                style={{ opacity: !hasMore ? 0.4 : 1, cursor: !hasMore ? 'not-allowed' : 'pointer' }}
+                            >
+                                NEXT PAGE <span className="icon">▶</span>
                             </button>
                         </div>
                     </div>

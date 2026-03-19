@@ -414,3 +414,28 @@
         flex-wrap: wrap;
     }
 }
+
+@media (max-width: 768px) {
+    .dungeons-content {
+        padding: 6rem 1rem 4rem; /* Adjusted for fixed navbar */
+    }
+
+    .page-title {
+        font-size: 2rem;
+    }
+
+    .dungeon-cards {
+        gap: 1rem;
+        justify-content: center;
+    }
+
+    .dungeon-card {
+        width: 100%;
+        max-width: 340px;
+    }
+
+    .status-item {
+        width: 100%;
+        justify-content: space-between;
+    }
+}

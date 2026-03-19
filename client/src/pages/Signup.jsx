@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { registerPlayer } from '../api/client'
+import { registerPlayer, loginPlayer } from '../api/client'
 import '../styles/signup.css'
 
 // Dialog lines for Guild Master
@@ -21,17 +21,7 @@ function generatePlayerId() {
     return `SZ${randomLetters}-${randomNumbers}`
 }
 
-// Role mapping
-const roleMap = {
-    'frontend': 'Frontend Developer',
-    'backend': 'Backend Developer',
-    'fullstack': 'Full Stack Developer',
-    'mobile': 'Mobile Developer',
-    'devops': 'DevOps Engineer',
-    'data': 'Data Engineer',
-    'ml': 'ML Engineer',
-    'security': 'Security Engineer'
-}
+
 
 function Signup() {
     const navigate = useNavigate()
@@ -40,10 +30,13 @@ function Signup() {
     const [dialogText, setDialogText] = useState('')
     const [isTyping, setIsTyping] = useState(false)
     const [playerName, setPlayerName] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
     const [techStack, setTechStack] = useState('')
     const [resumeUploaded, setResumeUploaded] = useState(false)
     const [playerId, setPlayerId] = useState('')
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const [authMode, setAuthMode] = useState('register')
 
     const typingTimeoutRef = useRef(null)
 
@@ -105,30 +98,38 @@ function Signup() {
         if (isSubmitting) return
 
         setIsSubmitting(true)
-        const generatedId = generatePlayerId()
-        setPlayerId(generatedId)
 
         try {
-            // Register with backend
-            const player = await registerPlayer(techStack)
+            if (authMode === 'register') {
+                const generatedId = generatePlayerId()
+                setPlayerId(generatedId)
 
-            // Store player data in localStorage
-            localStorage.setItem('playerName', playerName)
-            localStorage.setItem('playerId', player.id)
-            localStorage.setItem('playerRank', player.rank || 'E')
-            localStorage.setItem('techStack', techStack)
+                // Register with backend
+                const player = await registerPlayer(techStack, playerName, email, password)
 
-            // Update displayed ID with server-generated one
-            setPlayerId(player.id)
-            setCurrentScene('rank')
+                // Store player data in localStorage
+                localStorage.setItem('playerName', player.name || playerName)
+                localStorage.setItem('playerId', player.id)
+                localStorage.setItem('playerRank', player.rank || 'E')
+                localStorage.setItem('techStack', techStack)
+
+                // Update displayed ID with server-generated one
+                setPlayerId(player.id)
+                setCurrentScene('rank')
+            } else {
+                // Login with backend
+                const player = await loginPlayer(email, password)
+                
+                localStorage.setItem('playerName', player.name || 'Hunter')
+                localStorage.setItem('playerId', player.id)
+                localStorage.setItem('playerRank', player.rank || 'E')
+                localStorage.setItem('techStack', player.class || '')
+                
+                navigate('/dashboard')
+            }
         } catch (error) {
-            console.error('Registration failed:', error)
-            // Still proceed with local ID if backend fails
-            localStorage.setItem('playerName', playerName)
-            localStorage.setItem('playerId', generatedId)
-            localStorage.setItem('playerRank', 'E')
-            localStorage.setItem('techStack', techStack)
-            setCurrentScene('rank')
+            console.error('Auth failed:', error)
+            alert(error.message || 'Authentication failed. Please try again.')
         } finally {
             setIsSubmitting(false)
         }
@@ -207,57 +208,102 @@ function Signup() {
                         <div className="panel-corner bottom-right"></div>
                     </div>
 
-                    <h2 className="register-title">Official Guild Registration</h2>
-                    <p className="register-subtitle">Initiate your journey</p>
+                    <h2 className="register-title">
+                        {authMode === 'register' ? 'Official Guild Registration' : 'Guild Member Login'}
+                    </h2>
+                    <p className="register-subtitle">
+                        {authMode === 'register' ? 'Initiate your journey' : 'Welcome back, Hunter'}
+                    </p>
+
+                    <div className="auth-toggle">
+                        <button 
+                            type="button" 
+                            className={`toggle-btn ${authMode === 'login' ? 'active' : ''}`}
+                            onClick={() => setAuthMode('login')}
+                        >LOGIN</button>
+                        <button 
+                            type="button" 
+                            className={`toggle-btn ${authMode === 'register' ? 'active' : ''}`}
+                            onClick={() => setAuthMode('register')}
+                        >REGISTER</button>
+                    </div>
 
                     <form className="register-form" onSubmit={handleSubmit}>
+                        {authMode === 'register' && (
+                            <div className="form-group">
+                                <input
+                                    type="text"
+                                    className="form-input"
+                                    placeholder="NAME:"
+                                    required
+                                    value={playerName}
+                                    onChange={(e) => setPlayerName(e.target.value)}
+                                />
+                            </div>
+                        )}
+
                         <div className="form-group">
                             <input
-                                type="text"
+                                type="email"
                                 className="form-input"
-                                placeholder="NAME:"
+                                placeholder="EMAIL:"
                                 required
-                                value={playerName}
-                                onChange={(e) => setPlayerName(e.target.value)}
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                             />
                         </div>
 
-                        <div className="form-row">
-                            <div className="form-group flex-grow">
-                                <select
-                                    className="form-input form-select"
-                                    value={techStack}
-                                    onChange={(e) => setTechStack(e.target.value)}
-                                    required
-                                >
-                                    <option value="">TECH STACK:</option>
-                                    <option value="frontend">Frontend Developer</option>
-                                    <option value="backend">Backend Developer</option>
-                                    <option value="fullstack">Full Stack Developer</option>
-                                    <option value="mobile">Mobile Developer</option>
-                                    <option value="devops">DevOps Engineer</option>
-                                    <option value="data">Data Engineer</option>
-                                    <option value="ml">ML Engineer</option>
-                                    <option value="security">Security Engineer</option>
-                                </select>
-                            </div>
-                            <label className={`upload-btn ${resumeUploaded ? 'uploaded' : ''}`}>
-                                <input
-                                    type="file"
-                                    accept=".pdf,.doc,.docx"
-                                    hidden
-                                    onChange={handleFileChange}
-                                />
-                                <svg className="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                                    <polyline points="14 2 14 8 20 8" />
-                                </svg>
-                                <span>{resumeUploaded ? 'Resume Uploaded ✓' : 'UPLOAD RESUME'}</span>
-                            </label>
+                        <div className="form-group">
+                            <input
+                                type="password"
+                                className="form-input"
+                                placeholder="PASSWORD:"
+                                required
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
                         </div>
 
+                        {authMode === 'register' && (
+                            <div className="form-row">
+                                <div className="form-group flex-grow">
+                                    <select
+                                        className="form-input form-select"
+                                        value={techStack}
+                                        onChange={(e) => setTechStack(e.target.value)}
+                                        required
+                                    >
+                                        <option value="">TECH STACK:</option>
+                                        <option value="frontend">Frontend Developer</option>
+                                        <option value="backend">Backend Developer</option>
+                                        <option value="fullstack">Full Stack Developer</option>
+                                        <option value="mobile">Mobile Developer</option>
+                                        <option value="devops">DevOps Engineer</option>
+                                        <option value="data">Data Engineer</option>
+                                        <option value="ml">ML Engineer</option>
+                                        <option value="security">Security Engineer</option>
+                                    </select>
+                                </div>
+                                <label className={`upload-btn ${resumeUploaded ? 'uploaded' : ''}`}>
+                                    <input
+                                        type="file"
+                                        accept=".pdf,.doc,.docx"
+                                        hidden
+                                        onChange={handleFileChange}
+                                    />
+                                    <svg className="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                        <polyline points="14 2 14 8 20 8" />
+                                    </svg>
+                                    <span>{resumeUploaded ? 'Resume Uploaded ✓' : 'UPLOAD RESUME'}</span>
+                                </label>
+                            </div>
+                        )}
+
                         <button type="submit" className="btn-register" disabled={isSubmitting}>
-                            <span className="btn-text">{isSubmitting ? 'Registering...' : 'Register'}</span>
+                            <span className="btn-text">
+                                {isSubmitting ? 'Processing...' : (authMode === 'register' ? 'Register' : 'Login')}
+                            </span>
                             <div className="btn-wings">
                                 <svg className="wing left" viewBox="0 0 30 20" fill="currentColor">
                                     <path d="M0 10 L15 0 L10 10 L15 20 Z" />

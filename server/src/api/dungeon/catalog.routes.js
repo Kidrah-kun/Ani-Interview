@@ -28,6 +28,10 @@ router.get("/catalog/:playerId", async (req, res) => {
     try {
         const { playerId } = req.params;
 
+        if (!playerId.match(/^[0-9a-fA-F]{24}$/)) {
+            return res.status(404).json({ error: "Player not found" });
+        }
+
         // 1️⃣ Fetch player
         const player = await prisma.player.findUnique({
             where: { id: playerId },
@@ -52,7 +56,6 @@ router.get("/catalog/:playerId", async (req, res) => {
 
         const bossEligibility = canFightBoss({
             analysis,
-            recommendation,
         });
 
         const rankConfig = DUNGEON_CONFIG[player.rank];
@@ -160,8 +163,10 @@ router.get("/catalog/:playerId", async (req, res) => {
          * =========================
          */
         const progressionStatus = {
-            fundamentalsCleared: analysis.clearedFundamentals,
-            fundamentalsRequired: rankConfig.fundamentalsRequired || 2,
+            fundamentalCleared: analysis.fundamentalCleared,
+            fundamentalsRequired: 1,
+            dungeonsCleared: analysis.totalDungeonsCleared,
+            dungeonsRequiredForBoss: 5,
             bossUnlocked: bossEligibility.allowed,
             bossCleared,
             currentStreak: analysis.currentStreak,

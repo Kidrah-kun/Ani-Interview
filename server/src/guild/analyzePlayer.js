@@ -1,11 +1,19 @@
 import { calculateStreak, getStreakBonus } from "./streakTracker.js";
 
+/**
+ * PROGRESSION RULES:
+ * - fundamentalCleared: player has passed at least 1 normal dungeon at current rank
+ * - totalDungeonsCleared: total passed dungeons (normal + boss) at current rank
+ * - Boss unlocks after 5 total dungeon completions at current rank
+ */
 export function analyzePlayer(attempts, currentRank) {
   const analysis = {
     avgScore: 0,
     failedBoss: false,
     weaknessCount: {},
-    clearedFundamentals: 0,
+    fundamentalCleared: false,   // true if ≥1 normal dungeon passed this rank
+    totalDungeonsCleared: 0,     // count of all passed dungeons this rank
+    clearedFundamentals: 0,      // kept for backwards compat (same as totalDungeonsCleared now)
     currentStreak: 0,
     streakBonus: null,
     topWeaknesses: [],
@@ -18,27 +26,28 @@ export function analyzePlayer(attempts, currentRank) {
   let scoredAttempts = 0;
 
   for (const attempt of attempts) {
-    // PRACTICE attempts do NOT affect progression analysis
+    // PRACTICE attempts do NOT affect progression
     if (attempt.mode === "PRACTICE") continue;
 
     totalScore += attempt.avgScore;
     scoredAttempts++;
 
-    if (attempt.isBoss && !attempt.passed && attempt.rank === currentRank) {
+    if (attempt.rank !== currentRank) continue;
+
+    if (attempt.isBoss && !attempt.passed) {
       analysis.failedBoss = true;
-      // Track last boss failure time
       if (!analysis.lastBossFailure || new Date(attempt.createdAt) > new Date(analysis.lastBossFailure)) {
         analysis.lastBossFailure = attempt.createdAt;
       }
     }
 
-    // Count cleared fundamentals ONLY for current rank
-    if (
-      !attempt.isBoss &&
-      attempt.passed &&
-      attempt.rank === currentRank
-    ) {
-      analysis.clearedFundamentals++;
+    if (attempt.passed) {
+      analysis.totalDungeonsCleared++;
+
+      // Normal dungeon cleared = fundamental requirement met
+      if (!attempt.isBoss) {
+        analysis.fundamentalCleared = true;
+      }
     }
 
     for (const weakness of attempt.weakAreas || []) {
@@ -47,14 +56,13 @@ export function analyzePlayer(attempts, currentRank) {
     }
   }
 
-  analysis.avgScore =
-    scoredAttempts === 0 ? 0 : totalScore / scoredAttempts;
+  analysis.avgScore = scoredAttempts === 0 ? 0 : totalScore / scoredAttempts;
+  // Keep clearedFundamentals for backwards compat
+  analysis.clearedFundamentals = analysis.totalDungeonsCleared;
 
-  // Calculate streak
   analysis.currentStreak = calculateStreak(attempts, currentRank);
   analysis.streakBonus = getStreakBonus(analysis.currentStreak);
 
-  // Get top 3 weaknesses sorted by frequency
   analysis.topWeaknesses = Object.entries(analysis.weaknessCount)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 3)
@@ -62,4 +70,3 @@ export function analyzePlayer(attempts, currentRank) {
 
   return analysis;
 }
-

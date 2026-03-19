@@ -22,7 +22,7 @@ function Interview() {
     const [results, setResults] = useState(null)
 
     const playerId = localStorage.getItem('playerId')
-    const playerName = localStorage.getItem('playerName') || 'Hunter'
+
 
     // Redirect if no dungeon info
     useEffect(() => {

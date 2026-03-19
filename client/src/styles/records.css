@@ -256,3 +256,31 @@
         transform: translateY(0);
     }
 }
+
+/* =============================================
+   RESPONSIVE DESIGN
+   ============================================= */
+@media (max-width: 768px) {
+    .records-content {
+        padding: 6rem 1rem 4rem; /* Adjusted for navbar */
+    }
+
+    .records-header {
+        margin-bottom: 2rem;
+    }
+
+    .records-container {
+        padding: 1.5rem;
+    }
+
+    .records-container::before,
+    .records-container::after {
+        display: none;
+    }
+
+    .records-table th,
+    .records-table td {
+        padding: 0.8rem;
+        font-size: 0.9rem;
+    }
+}

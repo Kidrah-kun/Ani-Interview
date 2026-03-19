@@ -1,7 +1,0 @@
-
-> server@1.0.0 dev
-> node src/server.js
-
-✅ Guild Routes Loaded
-Mounting Guild Routes...
-🧙 Guild Server running on port 3001

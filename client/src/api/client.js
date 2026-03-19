@@ -8,19 +8,46 @@ const API_BASE = '/api';
 /**
  * Register a new player
  * @param {string} playerClass - The player's tech stack/class
- * @returns {Promise<{id: string, rank: string, class: string}>}
+ * @param {string} playerName - The player's name
+ * @param {string} email - The player's email
+ * @param {string} password - The player's password
+ * @returns {Promise<{id: string, rank: string, class: string, name: string}>}
  */
-export async function registerPlayer(playerClass) {
+export async function registerPlayer(playerClass, playerName, email, password) {
     const response = await fetch(`${API_BASE}/player/register`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ class: playerClass }),
+        body: JSON.stringify({ class: playerClass, name: playerName, email, password }),
     });
 
     if (!response.ok) {
-        throw new Error('Failed to register player');
+        const err = await response.json();
+        throw new Error(err.error || 'Failed to register player');
+    }
+
+    return response.json();
+}
+
+/**
+ * Login an existing player
+ * @param {string} email - The player's email
+ * @param {string} password - The player's password
+ * @returns {Promise<{id: string, rank: string, class: string, name: string}>}
+ */
+export async function loginPlayer(email, password) {
+    const response = await fetch(`${API_BASE}/player/login`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+    });
+
+    if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.error || 'Invalid email or password');
     }
 
     return response.json();
@@ -80,7 +107,8 @@ export async function getDungeonCatalog(playerId) {
     const response = await fetch(`${API_BASE}/dungeon/catalog/${playerId}`);
 
     if (!response.ok) {
-        throw new Error('Failed to fetch dungeon catalog');
+        const error = await response.json().catch(() => ({}));
+        throw new Error(error.error || 'Failed to fetch dungeon catalog');
     }
 
     return response.json();
@@ -146,9 +174,11 @@ export async function submitAnswers(attemptId, answers) {
  * Get the global leaderboard
  * @returns {Promise<Array<{id: string, rank: string, class: string, score: number}>>}
  */
-export async function getLeaderboard() {
+export async function getLeaderboard(page = 1, playerId = null) {
     try {
-        const response = await fetch(`${API_BASE}/player/public/leaderboard`);
+        const params = new URLSearchParams({ page, limit: 10 });
+        if (playerId) params.set('playerId', playerId);
+        const response = await fetch(`${API_BASE}/player/public/leaderboard?${params}`);
         if (!response.ok) {
             throw new Error('Failed to fetch leaderboard');
         }

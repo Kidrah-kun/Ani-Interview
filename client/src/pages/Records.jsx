@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+
 import Navbar from '../components/Navbar'
 import '../styles/records.css'
 
 import { getPlayerHistory } from '../api/client'
 
 function Records() {
-    const navigate = useNavigate()
+
     const [history, setHistory] = useState([])
     const [loading, setLoading] = useState(true)
 
@@ -40,7 +40,7 @@ function Records() {
 
             <main className="records-content">
                 <header className="records-header">
-                    <h1 className="page-title">Hunter's Log</h1>
+                    <h1 className="page-title">Hunter&apos;s Log</h1>
                     <p className="page-subtitle">History of your conquests and failures</p>
                 </header>
 
