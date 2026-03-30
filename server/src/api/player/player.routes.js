@@ -36,7 +36,7 @@ router.post("/register", async (req, res) => {
     res.json(player);
   } catch (error) {
     console.error("Error registering player:", error);
-    res.status(500).json({ error: "Failed to register player", details: error.message });
+    res.status(500).json({ error: "Failed to register player" });
   }
 });
 
