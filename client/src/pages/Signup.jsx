@@ -42,13 +42,16 @@ function Signup() {
 
     // Typewriter effect
     const typeText = useCallback((text, callback) => {
+        if (typingTimeoutRef.current) {
+            clearTimeout(typingTimeoutRef.current)
+        }
         setIsTyping(true)
         setDialogText('')
         let i = 0
 
         const type = () => {
             if (i < text.length) {
-                setDialogText(prev => prev + text.charAt(i))
+                setDialogText(text.substring(0, i + 1))
                 i++
                 typingTimeoutRef.current = setTimeout(type, 30)
             } else {
@@ -56,7 +59,8 @@ function Signup() {
                 if (callback) callback()
             }
         }
-        type()
+        // Small delay to let the initial state flush
+        typingTimeoutRef.current = setTimeout(type, 30)
     }, [])
 
     // Skip typing animation
@@ -70,10 +74,14 @@ function Signup() {
 
     // Start dialog when entering guildmaster scene
     useEffect(() => {
+        let timeout;
         if (currentScene === 'guildmaster') {
-            setTimeout(() => {
+            timeout = setTimeout(() => {
                 typeText(dialogLines[0])
             }, 500)
+        }
+        return () => {
+            if (timeout) clearTimeout(timeout);
         }
     }, [currentScene, typeText])
 
