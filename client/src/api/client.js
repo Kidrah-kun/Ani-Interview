@@ -3,7 +3,7 @@
  * Connects to Express server on port 3001
  */
 
-const API_BASE = '/api';
+const API_BASE = 'https://ani-interview.vercel.app/api';
 
 /**
  * Register a new player
